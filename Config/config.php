@@ -1,22 +1,63 @@
 <?php
 
+$integrationArguments = [
+    'event_dispatcher',
+    'mautic.helper.cache_storage',
+    'doctrine.orm.entity_manager',
+];
+
+// Mautic 5 expects `session`; Mautic 6/7 removed it and added FieldsWithUniqueIdentifier.
+if (class_exists(\Mautic\LeadBundle\Field\FieldsWithUniqueIdentifier::class)) {
+    $integrationArguments = array_merge($integrationArguments, [
+        'request_stack',
+        'router',
+        'translator',
+        'logger',
+        'mautic.helper.encryption',
+        'mautic.lead.model.lead',
+        'mautic.lead.model.company',
+        'mautic.helper.paths',
+        'mautic.core.model.notification',
+        'mautic.lead.model.field',
+        'mautic.plugin.model.integration_entity',
+        'mautic.lead.model.dnc',
+        'mautic.lead.field.fields_with_unique_identifier',
+    ]);
+} else {
+    $integrationArguments = array_merge($integrationArguments, [
+        'session',
+        'request_stack',
+        'router',
+        'translator',
+        'logger',
+        'mautic.helper.encryption',
+        'mautic.lead.model.lead',
+        'mautic.lead.model.company',
+        'mautic.helper.paths',
+        'mautic.core.model.notification',
+        'mautic.lead.model.field',
+        'mautic.plugin.model.integration_entity',
+        'mautic.lead.model.dnc',
+    ]);
+}
+
 return [
     'name'         => 'Zender',
-    'description'  => 'This plugin replaces the SMS channel and allows you to send messages to WhatsApp using a Zender account. Intended for >= Mautic 6.0.5',
+    'description'  => 'This plugin replaces the SMS channel and allows you to send messages to WhatsApp using a Zender account. Intended for Mautic 5/6/7',
     'author'       => 'renato.carabelli@7catstudio.com',
-    'version'      => '1.1.2',
-    'release_date' => '2024-06-22',
+    'version'      => '1.2.4',
+    'release_date' => '2026-02-26',
     'license'      => 'GNU/GPLv3',
     'homepage'     => 'https://github.com/rcarabelli/Mautic-Zender-Plugin',
     'support'      => 'https://www.7catstudio.com or requests@7catstudio.com',
     'requirements' => [
-        'mautic' => '>=6.0.5',
-        'php'    => '>=8.2',
+        'mautic' => '>=5.1.0 <8.0.0',
+        'php'    => '>=8.1',
         'dependencies' => [
-            'zender' => 'https://codecanyon.net/item/zender-android-mobile-devices-as-sms-gateway-saas-platform/26594230'
-        ]
+            'zender' => 'https://codecanyon.net/item/zender-android-mobile-devices-as-sms-gateway-saas-platform/26594230',
+        ],
     ],
-    'last_updated' => '2024-06-22',
+    'last_updated' => '2026-02-26',
     'services' => [
         'events' => [
             'mautic.zender.plugin_activate.subscriber' => [
@@ -28,7 +69,21 @@ return [
         ],
         'forms'   => [],
         'helpers' => [],
-        'models'       => [],
+        'command' => [
+            'mautic.zender.command.sync_messages' => [
+                'class'     => \MauticPlugin\MauticZenderBundle\Command\SyncMessagesCommand::class,
+                'arguments' => [
+                    'doctrine.orm.entity_manager',
+                    'mautic.helper.integration',
+                    'mautic.lead.model.lead',
+                    'monolog.logger.mautic',
+                    'mautic.http.client',
+                    'mautic.helper.core_parameters',
+                ],
+                'tag'       => 'console.command',
+            ],
+        ],
+        'models'  => [],
         'other'   => [
             'mautic.sms.transport.zender' => [
                 'class'     => \MauticPlugin\MauticZenderBundle\Transport\ZenderTransport::class,
@@ -48,35 +103,34 @@ return [
         'integrations' => [
             'mautic.integration.zender' => [
                 'class' => \MauticPlugin\MauticZenderBundle\Integration\ZenderIntegration::class,
-                'arguments' => [
-                    'event_dispatcher',
-                    'mautic.helper.cache_storage',
-                    'doctrine.orm.entity_manager',
-                    // M6: no 'session'; use RequestStack
-                    'request_stack',
-                    'router',
-                    'translator',
-                    'logger',
-                    'mautic.helper.encryption',
-                    'mautic.lead.model.lead',
-                    'mautic.lead.model.company',
-                    'mautic.helper.paths',
-                    'mautic.core.model.notification',
-                    'mautic.lead.model.field',
-                    'mautic.plugin.model.integration_entity',
-                    'mautic.lead.model.dnc',
-                    // M6 needs this extra dependency vs M5
-                    'mautic.lead.field.fields_with_unique_identifier',
-                ],
+                'arguments' => $integrationArguments,
             ],
         ],
     ],
-    'routes'     => [],
+    'routes'     => [
+        'public' => [
+            'mautic_zender_receive_webhook_legacy' => [
+                'path'       => '/zender/receive/{key}/{phone}/{message}/{time}/{datetime}',
+                'controller' => \MauticPlugin\MauticZenderBundle\Controller\ZenderWebhookController::class.'::receiveAction',
+                'method'     => 'GET',
+            ],
+            'mautic_zender_receive_webhook_get' => [
+                'path'       => '/zender/receive/{key}',
+                'controller' => \MauticPlugin\MauticZenderBundle\Controller\ZenderWebhookController::class.'::receiveAction',
+                'method'     => 'GET',
+            ],
+            'mautic_zender_receive_webhook_post' => [
+                'path'       => '/zender/receive/{key}',
+                'controller' => \MauticPlugin\MauticZenderBundle\Controller\ZenderWebhookController::class.'::receiveAction',
+                'method'     => 'POST',
+            ],
+        ],
+    ],
     'menu'       => [
         'main' => [
             'items' => [
-                'mautic.zender.smses' => [  
-                    'route'    => 'mautic_sms_index',  
+                'mautic.zender.smses' => [
+                    'route'    => 'mautic_sms_index',
                     'access'   => ['sms:smses:viewown', 'sms:smses:viewother'],
                     'parent'   => 'mautic.core.channels',
                     'checks'   => [

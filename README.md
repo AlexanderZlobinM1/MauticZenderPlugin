@@ -1,12 +1,13 @@
-# Mautic WhatsApp (via Zender) – Plugin v1.1.2
+# Mautic WhatsApp (via Zender) – Plugin v1.2.4
 
 ## Overview
-This plugin replaces Mautic's SMS channel and sends WhatsApp messages using a Zender account (can be your own instance). It supports Mautic campaigns, segmentation, placeholders, and tracking. Zender acts as a bridge to WhatsApp (not Meta's official API). Designed for Mautic ≥ 6.0.5
+This plugin replaces Mautic's SMS channel and sends WhatsApp messages using a Zender account (can be your own instance). It supports Mautic campaigns, segmentation, placeholders, and tracking. Zender acts as a bridge to WhatsApp (not Meta's official API). Designed for Mautic 5.1+ (including Mautic 6 and 7).
 
 Inspired by: “Weekend project – a Mautic WhatsApp plugin” by Joey Keller.
 
 ## What the Plugin Does
 - Sends WhatsApp messages from Mautic’s “Text Messages” channel via Zender.
+- Receives inbound WhatsApp webhook callbacks from Zender and tags the matched contact.
 - Supports Mautic placeholders (e.g., `{contactfield=firstname}`).
 - Detects if your content includes image or video URLs and sends the message as “media” to embed the first image.
 - Automatically converts Mautic’s “/r/…” URLs to their real destination for media (so WhatsApp can display images/videos directly).
@@ -14,8 +15,8 @@ Inspired by: “Weekend project – a Mautic WhatsApp plugin” by Joey Keller.
 - Logs every send, HTTP response, and error in Mautic for debugging.
 
 ## Requirements
-- Mautic 6.0.5 or higher.
-- PHP 8.2 or higher.
+- Mautic 5.1.0 or higher (tested target: Mautic 5, 6 and 7).
+- PHP 8.1 or higher.
 - An operational Zender instance (with connected WhatsApp devices).
 - In Zender: an API Key and the “Account ID” (token) identifying the sender’s WhatsApp number.
 - In Mautic contacts:
@@ -50,6 +51,18 @@ Inspired by: “Weekend project – a Mautic WhatsApp plugin” by Joey Keller.
    - Replaces “/r/…” links with their real URL for WhatsApp to download media.
    - Uses the first image found as visible media in WhatsApp; other links remain as text.
 4. Launch the campaign (or run crons) and check Mautic’s log for send results.
+
+## Inbound Webhook (Receive Messages)
+- Webhook endpoint (recommended):
+  - `https://YOUR-MAUTIC/zender/receive/{key}`
+- Legacy-compatible endpoint (from older builds):
+  - `https://YOUR-MAUTIC/zender/receive/{key}/{phone}/{message}/{time}/{datetime}`
+- `{key}` is validated against the plugin integration keys. By default use your configured `zender_api_key`.
+- Accepted payload formats:
+  - `GET` query params: `phone`, `message`, `time`, `datetime`
+  - `POST` form/json body with `phone` (or `from`) and `message` (or `text`)
+- On success, plugin finds the lead by `phone`/`mobile` and adds tag:
+  - `whatsapp_message_answered_zender`
 
 ## Useful Commands (Cron/Manual)
 - Update campaign members:  
@@ -113,13 +126,21 @@ The plugin logs clear entries in `var/logs/mautic_prod-YYYY-MM-DD.php`, e.g.:
 - **Update**: Replace the plugin folder, clear cache, run “Install/Upgrade Plugins”.
 - **Uninstall**: Remove the plugin folder and clear cache. The custom field remains until manually deleted (if desired).
 
-## Changes in v1.1.2
+## Changes in v1.2.4
+- Restored full v1.1.14 feature set with fixed logic and Mautic 5/6/7 compatibility.
+- Added full sync command flow (`mautic:zender:sync-messages`) for `wa.pending`, `wa.received`, `wa.sent`.
+- Added schema update path for sync table/fields and protection for legacy short columns.
+- Added inbound webhook receive support (`/zender/receive/...`).
+- Added automatic lead tagging for inbound WhatsApp replies.
+- Kept cross-version compatibility for Mautic 5/6/7.
+
+## Changes in v1.2.0
 - Phone numbers normalized to E.164 without forcing a default region.
 - Sending via Guzzle with timeouts and detailed logs (API key masked).
 - Automatic media detection (image/video) and “media” payload adjustment.
 - Replaced /r/... links with real URLs so WhatsApp can download media.
 - Credential checks for API URL and API key, with clear error messages.
-- Service wiring compatible with Mautic 6 (FieldsWithUniqueIdentifier).
+- Dynamic integration service wiring compatible with Mautic 5/6/7.
 
 ## Contact and Support
 Questions and support: Form at https://www.7catstudio.com or email requests@7catstudio.com.
