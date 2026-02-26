@@ -1,3 +1,7 @@
+## v1.2.7
+- Verified Mautic locale list and standardized Serbian locale to `sr_RS`.
+- Removed duplicate Serbian translation folder `sr-rs`.
+
 ## v1.2.6
 - Switched plugin icon to the standard WhatsApp icon (`Assets/img/whatsapp.png`).
 - Added Russian translations under locale `ru`.
