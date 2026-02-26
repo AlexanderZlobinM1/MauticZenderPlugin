@@ -38,7 +38,7 @@ class ZenderIntegration extends AbstractIntegration
      */
     public function getIcon()
     {
-        return 'plugins/MauticZenderBundle/Assets/img/7cats-isotipo-red-200x200.png';
+        return 'plugins/MauticZenderBundle/Assets/img/whatsapp.png';
     }
 
     /**

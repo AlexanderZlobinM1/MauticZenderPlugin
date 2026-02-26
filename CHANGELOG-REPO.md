@@ -1,3 +1,8 @@
+## v1.2.6
+- Switched plugin icon to the standard WhatsApp icon (`Assets/img/whatsapp.png`).
+- Added Russian translations under locale `ru`.
+- Added Latin Serbian translations under locale `sr-rs`.
+
 ## v1.2.5
 - Replaced old upstream repository references with the new project repository.
 - Updated plugin metadata (`homepage`, `support`, `author`) to project-owned values.
