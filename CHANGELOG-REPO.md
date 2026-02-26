@@ -1,3 +1,8 @@
+## v1.2.5
+- Replaced old upstream repository references with the new project repository.
+- Updated plugin metadata (`homepage`, `support`, `author`) to project-owned values.
+- Updated integration help text link to point to the new repository.
+
 ## v1.2.4
 - Full functional parity with legacy v1.1.14 on top of fixed Mautic 5/6/7-compatible codebase.
 - Restored full Features tab settings (`fetch_quantity`, `fetch_unit`, `batch_size`).

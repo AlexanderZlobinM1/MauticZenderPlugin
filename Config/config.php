@@ -44,12 +44,12 @@ if (class_exists(\Mautic\LeadBundle\Field\FieldsWithUniqueIdentifier::class)) {
 return [
     'name'         => 'Zender',
     'description'  => 'This plugin replaces the SMS channel and allows you to send messages to WhatsApp using a Zender account. Intended for Mautic 5/6/7',
-    'author'       => 'renato.carabelli@7catstudio.com',
-    'version'      => '1.2.4',
+    'author'       => 'AlexanderZlobinM1',
+    'version'      => '1.2.5',
     'release_date' => '2026-02-26',
     'license'      => 'GNU/GPLv3',
-    'homepage'     => 'https://github.com/rcarabelli/Mautic-Zender-Plugin',
-    'support'      => 'https://www.7catstudio.com or requests@7catstudio.com',
+    'homepage'     => 'https://github.com/AlexanderZlobinM1/MauticZenderPlugin-1.2.x',
+    'support'      => 'https://github.com/AlexanderZlobinM1/MauticZenderPlugin-1.2.x/issues',
     'requirements' => [
         'mautic' => '>=5.1.0 <8.0.0',
         'php'    => '>=8.1',
