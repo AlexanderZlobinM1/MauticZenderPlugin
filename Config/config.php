@@ -45,7 +45,7 @@ return [
     'name'         => 'Zender',
     'description'  => 'This plugin replaces the SMS channel and allows you to send messages to WhatsApp using a Zender account. Intended for Mautic 5/6/7',
     'author'       => 'AlexanderZlobinM1',
-    'version'      => '1.2.7',
+    'version'      => '1.2.8',
     'release_date' => '2026-02-26',
     'license'      => 'GNU/GPLv3',
     'homepage'     => 'https://github.com/AlexanderZlobinM1/MauticZenderPlugin-1.2.x',

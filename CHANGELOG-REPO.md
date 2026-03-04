@@ -1,3 +1,10 @@
+## v1.2.8
+- Fixed plugin migration layout for Mautic reload flow:
+  - moved migrations from `Migrations/Schema/` to flat `Migrations/`.
+  - migrated classes to `Mautic\IntegrationsBundle\Migration\AbstractMigration`.
+  - implemented `isApplicable(Schema $schema): bool` and `up(): void`.
+- Removed legacy migration files that caused plugin reload failures on Mautic 6.
+
 ## v1.2.7
 - Verified Mautic locale list and standardized Serbian locale to `sr_RS`.
 - Removed duplicate Serbian translation folder `sr-rs`.
