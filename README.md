@@ -3,6 +3,8 @@
 ## Overview
 This plugin replaces Mautic's SMS channel and sends WhatsApp messages using a Zender account (can be your own instance). It supports Mautic campaigns, segmentation, placeholders, and tracking. Zender acts as a bridge to WhatsApp (not Meta's official API). Designed for Mautic 5.1+ (including Mautic 6 and 7).
 
+Based on [rcarabelli/Mautic-Zender-Plugin](https://github.com/rcarabelli/Mautic-Zender-Plugin), with compatibility fixes, restored features, and ongoing updates maintained here.
+
 Inspired by: “Weekend project – a Mautic WhatsApp plugin” by Joey Keller.
 
 ## What the Plugin Does
