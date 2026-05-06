@@ -73,8 +73,23 @@ Inspired by: “Weekend project – a Mautic WhatsApp plugin” by Joey Keller.
   `php bin/console mautic:campaigns:trigger -vvv`
 - Send SMS broadcasts (if applicable):  
   `php bin/console mautic:broadcasts:send`
+- Sync WhatsApp/Zender message statuses and replies:  
+  `php bin/console mautic:zender:sync-messages`
 - View logs in real-time:  
   `tail -f var/logs/mautic_prod-YYYY-MM-DD.php`
+
+### Cron Example
+Run the Zender sync command regularly so Mautic checks `wa.pending`, `wa.received`, and `wa.sent`, updates contact message fields, and processes WhatsApp replies.
+
+```cron
+*/5 * * * * cd /var/www/mautic && php bin/console mautic:zender:sync-messages >/dev/null 2>&1
+```
+
+If your server uses a versioned PHP binary, use that binary explicitly:
+
+```cron
+*/5 * * * * cd /var/www/mautic && /usr/bin/php8.3 bin/console mautic:zender:sync-messages >/dev/null 2>&1
+```
 
 ## Zender Configuration (Payload Reference)
 The plugin sends a POST `application/x-www-form-urlencoded` to the Zender API URL with fields like:
