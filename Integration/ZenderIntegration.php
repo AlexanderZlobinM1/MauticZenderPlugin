@@ -179,7 +179,7 @@ class ZenderIntegration extends AbstractIntegration
                         .'Configure the API key, API URL, and Shortener URL in the Enabled/Auth tab. '
                         .'In the Features tab, set the Fetch Quantity, Fetch Unit, and Batch Size to control '
                         .'how messages are fetched and processed. Use the API URL only up to the /api part. '
-                        .'For detailed instructions, refer to the documentation at: https://github.com/AlexanderZlobinM1/MauticZenderPlugin-1.2.x',
+                        .'For detailed instructions, refer to the documentation at: https://github.com/AlexanderZlobinM1/MauticZenderPlugin',
                 ]
             );
         }

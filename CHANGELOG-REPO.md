@@ -1,3 +1,7 @@
+## v1.2.10
+- Made `https://github.com/AlexanderZlobinM1/MauticZenderPlugin` the public canonical repository.
+- Updated plugin metadata, documentation, and release packaging links away from the old private `MauticZenderPlugin-1.2.x` repository name.
+
 ## v1.2.9
 - Fixed the Mautic plugin install/update path:
   - switched the root bundle class from legacy `PluginBundleBase` to `Mautic\IntegrationsBundle\Bundle\AbstractPluginBundle`.
