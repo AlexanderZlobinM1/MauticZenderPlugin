@@ -7,7 +7,7 @@ namespace MauticPlugin\MauticZenderBundle\Migrations;
 use Doctrine\DBAL\Schema\Schema;
 use Mautic\IntegrationsBundle\Migration\AbstractMigration;
 
-class Version0002 extends AbstractMigration
+class Version_1_2_9 extends AbstractMigration
 {
     /** @var string[] */
     private array $queries = [];
@@ -19,7 +19,7 @@ class Version0002 extends AbstractMigration
         $this->prepareLogTableQueries($schema);
         $this->prepareLeadTableQueries($schema);
 
-        return !empty($this->queries);
+        return [] !== $this->queries;
     }
 
     protected function up(): void
@@ -42,7 +42,7 @@ class Version0002 extends AbstractMigration
                     `last_message_at` DATETIME DEFAULT NULL,
                     `response_data` LONGTEXT NOT NULL,
                     `status` VARCHAR(255) NOT NULL,
-                    `message_type` VARCHAR(50) NOT NULL,
+                    `message_type` VARCHAR(50) NOT NULL DEFAULT \'\',
                     `processed_at` DATETIME DEFAULT NULL,
                     PRIMARY KEY(`id`)
                 ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB',
@@ -56,7 +56,7 @@ class Version0002 extends AbstractMigration
 
         if (!$table->hasColumn('message_type')) {
             $this->queries[] = sprintf(
-                'ALTER TABLE `%s` ADD `message_type` VARCHAR(50) NOT NULL',
+                'ALTER TABLE `%s` ADD `message_type` VARCHAR(50) NOT NULL DEFAULT \'\'',
                 $logTable
             );
         }
@@ -84,29 +84,16 @@ class Version0002 extends AbstractMigration
         $this->addLeadColumnIfMissing($table, $leadTable, 'last_received_message_status', 'VARCHAR(64) DEFAULT NULL');
         $this->addLeadColumnIfMissing($table, $leadTable, 'last_received_message_content', 'VARCHAR(255) DEFAULT NULL');
 
-        if ($table->hasColumn('last_sent_message_content')) {
-            $length = (int) $table->getColumn('last_sent_message_content')->getLength();
-            if ($length > 0 && $length < 255) {
-                $this->queries[] = sprintf(
-                    'ALTER TABLE `%s` MODIFY `last_sent_message_content` VARCHAR(255) DEFAULT NULL',
-                    $leadTable
-                );
-            }
-        }
-
-        if ($table->hasColumn('last_received_message_content')) {
-            $length = (int) $table->getColumn('last_received_message_content')->getLength();
-            if ($length > 0 && $length < 255) {
-                $this->queries[] = sprintf(
-                    'ALTER TABLE `%s` MODIFY `last_received_message_content` VARCHAR(255) DEFAULT NULL',
-                    $leadTable
-                );
-            }
-        }
+        $this->widenLeadColumnIfShort($table, $leadTable, 'last_sent_message_content', 255);
+        $this->widenLeadColumnIfShort($table, $leadTable, 'last_received_message_content', 255);
     }
 
-    private function addLeadColumnIfMissing(\Doctrine\DBAL\Schema\Table $table, string $tableName, string $columnName, string $definition): void
-    {
+    private function addLeadColumnIfMissing(
+        \Doctrine\DBAL\Schema\Table $table,
+        string $tableName,
+        string $columnName,
+        string $definition
+    ): void {
         if ($table->hasColumn($columnName)) {
             return;
         }
@@ -117,5 +104,26 @@ class Version0002 extends AbstractMigration
             $columnName,
             $definition
         );
+    }
+
+    private function widenLeadColumnIfShort(
+        \Doctrine\DBAL\Schema\Table $table,
+        string $tableName,
+        string $columnName,
+        int $requiredLength
+    ): void {
+        if (!$table->hasColumn($columnName)) {
+            return;
+        }
+
+        $length = (int) $table->getColumn($columnName)->getLength();
+        if ($length > 0 && $length < $requiredLength) {
+            $this->queries[] = sprintf(
+                'ALTER TABLE `%s` MODIFY `%s` VARCHAR(%d) DEFAULT NULL',
+                $tableName,
+                $columnName,
+                $requiredLength
+            );
+        }
     }
 }

@@ -4,6 +4,7 @@ namespace MauticPlugin\MauticZenderBundle\EventListener;
 
 use Mautic\PluginBundle\PluginEvents;
 use Mautic\PluginBundle\Event\PluginInstallEvent;
+use Mautic\PluginBundle\Event\PluginUpdateEvent;
 use Mautic\LeadBundle\Model\FieldModel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -28,27 +29,39 @@ class PluginActivatedEventListener implements EventSubscriberInterface
     {
         return [
             PluginEvents::ON_PLUGIN_INSTALL => ['onPluginInstall', 0],
+            PluginEvents::ON_PLUGIN_UPDATE  => ['onPluginUpdate', 0],
         ];
     }
 
     public function onPluginInstall(PluginInstallEvent $event)
     {
         if ($event->getPlugin()->getName() === 'Zender') {
-            // Check if the custom field already exists
-            $existingField = $this->fieldModel->getRepository()->findOneByAlias('id_whatsapp_in_zender');
-            if (!$existingField) {
-                // Create the custom field
-                $field = new \Mautic\LeadBundle\Entity\LeadField();
-                $field->setName('ID WhatsApp in Zender');
-                $field->setAlias('id_whatsapp_in_zender');
-                $field->setType('text');
-                $field->setGroup('core');
-                $field->setObject('lead');
-                $field->setIsPublished(true);
-
-                // Save the custom field
-                $this->fieldModel->saveEntity($field);
-            }
+            $this->ensureZenderField();
         }
+    }
+
+    public function onPluginUpdate(PluginUpdateEvent $event)
+    {
+        if ($event->getPlugin()->getName() === 'Zender') {
+            $this->ensureZenderField();
+        }
+    }
+
+    private function ensureZenderField(): void
+    {
+        $existingField = $this->fieldModel->getRepository()->findOneByAlias('id_whatsapp_in_zender');
+        if ($existingField) {
+            return;
+        }
+
+        $field = new \Mautic\LeadBundle\Entity\LeadField();
+        $field->setName('ID WhatsApp in Zender');
+        $field->setAlias('id_whatsapp_in_zender');
+        $field->setType('text');
+        $field->setGroup('core');
+        $field->setObject('lead');
+        $field->setIsPublished(true);
+
+        $this->fieldModel->saveEntity($field);
     }
 }

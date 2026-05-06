@@ -11,11 +11,11 @@
 
 namespace MauticPlugin\MauticZenderBundle;
 
-use Mautic\PluginBundle\Bundle\PluginBundleBase;
+use Mautic\IntegrationsBundle\Bundle\AbstractPluginBundle;
 
 /**
  * Class MauticZenderBundle.
  */
-class MauticZenderBundle extends PluginBundleBase
+class MauticZenderBundle extends AbstractPluginBundle
 {
 }

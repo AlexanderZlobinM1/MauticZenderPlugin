@@ -1,3 +1,10 @@
+## v1.2.9
+- Fixed the Mautic plugin install/update path:
+  - switched the root bundle class from legacy `PluginBundleBase` to `Mautic\IntegrationsBundle\Bundle\AbstractPluginBundle`.
+  - replaced invalid `Version000X` migration files with semantic-versioned `Migrations/Version_1_2_9.php`.
+  - kept migration checks idempotent for databases that already have all or part of the Zender schema.
+- Added update-event handling so the `id_whatsapp_in_zender` lead field is ensured during plugin updates, not only first install.
+
 ## v1.2.8
 - Fixed plugin migration layout for Mautic reload flow:
   - moved migrations from `Migrations/Schema/` to flat `Migrations/`.
