@@ -1,3 +1,9 @@
+## v1.2.11
+- Fixed Mautic 7/Symfony 7 console compatibility for `mautic:zender:sync-messages`
+  by adding explicit `configure(): void` and `execute(...): int` method
+  signatures. This prevents `cache:clear` from failing while loading plugin
+  commands after automatic plugin installation.
+
 ## v1.2.10
 - Made `https://github.com/AlexanderZlobinM1/MauticZenderPlugin` the public canonical repository.
 - Updated plugin metadata, documentation, and release packaging links away from the old private `MauticZenderPlugin-1.2.x` repository name.

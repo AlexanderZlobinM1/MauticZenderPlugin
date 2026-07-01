@@ -73,12 +73,12 @@ class SyncMessagesCommand extends Command
         $this->prefix              = (string) $coreParametersHelper->get('db_table_prefix');
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Synchronize message statuses and inbound/outbound messages from Zender.');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $settings = $this->getIntegrationSettings();
         if (null === $settings) {
