@@ -16,6 +16,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class SyncMessagesCommand extends Command
 {
+    private const COMMAND_NAME = 'mautic:zender:sync-messages';
+
     private const DEFAULT_FETCH_QUANTITY = 7;
     private const DEFAULT_FETCH_UNIT     = 'days';
     private const DEFAULT_BATCH_SIZE     = 50;
@@ -24,7 +26,7 @@ class SyncMessagesCommand extends Command
     private const TYPE_RECEIVED = 'wa.received';
     private const TYPE_SENT     = 'wa.sent';
 
-    protected static $defaultName = 'mautic:zender:sync-messages';
+    protected static $defaultName = self::COMMAND_NAME;
 
     /** @var EntityManagerInterface */
     private $entityManager;
@@ -61,7 +63,7 @@ class SyncMessagesCommand extends Command
         Client $client,
         CoreParametersHelper $coreParametersHelper
     ) {
-        parent::__construct();
+        parent::__construct(self::COMMAND_NAME);
 
         $this->entityManager       = $entityManager;
         $this->integrationHelper   = $integrationHelper;

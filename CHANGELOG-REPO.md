@@ -1,3 +1,8 @@
+## v1.2.12
+- Fixed Symfony 7 command registration by passing the Zender sync command name
+  to the parent `Command` constructor. This removes the Mautic 7 warning that
+  the command cannot have an empty name during cache clear/plugin reload.
+
 ## v1.2.11
 - Fixed Mautic 7/Symfony 7 console compatibility for `mautic:zender:sync-messages`
   by adding explicit `configure(): void` and `execute(...): int` method
