@@ -1,4 +1,4 @@
-# Mautic WhatsApp (via Zender) – Plugin v1.2.12
+# Mautic WhatsApp (via Zender) – Plugin v1.2.13
 
 ## Overview
 This plugin replaces Mautic's SMS channel and sends WhatsApp messages using a Zender account (can be your own instance). It supports Mautic campaigns, segmentation, placeholders, and tracking. Zender acts as a bridge to WhatsApp (not Meta's official API). Designed for Mautic 5.1+ (including Mautic 6 and 7).
@@ -142,6 +142,12 @@ The plugin logs clear entries in `var/logs/mautic_prod-YYYY-MM-DD.php`, e.g.:
 ## Uninstallation / Update
 - **Update**: Replace the plugin folder, clear cache, run “Install/Upgrade Plugins”.
 - **Uninstall**: Remove the plugin folder and clear cache. The custom field remains until manually deleted (if desired).
+
+## Changes in v1.2.13
+- Fixed Mautic 7 SMS transport compatibility by switching the transport class
+  to the current `Mautic\SmsBundle\Sms\TransportInterface` contract. This avoids
+  fatal errors from the removed `AbstractSmsApi` class when the plugin is
+  installed or enabled.
 
 ## Changes in v1.2.12
 - Fixed Symfony 7 command registration by passing the Zender sync command name

@@ -10,10 +10,10 @@ use libphonenumber\PhoneNumberUtil;
 use Mautic\LeadBundle\Entity\Lead;
 use Mautic\PageBundle\Entity\Redirect;
 use Mautic\PluginBundle\Helper\IntegrationHelper;
-use Mautic\SmsBundle\Api\AbstractSmsApi;
+use Mautic\SmsBundle\Sms\TransportInterface;
 use Psr\Log\LoggerInterface;
 
-class ZenderTransport extends AbstractSmsApi
+class ZenderTransport implements TransportInterface
 {
     private const ZENDER_TYPE = 'text';
 

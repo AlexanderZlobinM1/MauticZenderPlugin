@@ -1,3 +1,9 @@
+## v1.2.13
+- Fixed Mautic 7 SMS transport compatibility by implementing
+  `Mautic\SmsBundle\Sms\TransportInterface` instead of extending the removed
+  `Mautic\SmsBundle\Api\AbstractSmsApi`. This prevents plugin load failures
+  during dashboard requests, cache clear, and plugin reload.
+
 ## v1.2.12
 - Fixed Symfony 7 command registration by passing the Zender sync command name
   to the parent `Command` constructor. This removes the Mautic 7 warning that
