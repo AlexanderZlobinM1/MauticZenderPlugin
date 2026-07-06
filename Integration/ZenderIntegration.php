@@ -199,6 +199,19 @@ class ZenderIntegration extends AbstractIntegration
         ];
     }
 
+    public function getFormNotes($section)
+    {
+        if ('custom' === $section) {
+            return [
+                'custom'     => true,
+                'template'   => '@MauticZender/Integration/footer.html.twig',
+                'parameters' => [],
+            ];
+        }
+
+        return parent::getFormNotes($section);
+    }
+
     /**
      * {@inheritdoc}
      *
