@@ -1,3 +1,11 @@
+## v1.2.15
+- Updated the unified Sales Snap footer to the canonical `sales-snap.com`
+  domain.
+
+## v1.2.14
+- Added the unified Sales Snap footer without changing the existing WhatsApp
+  plugin icon.
+
 ## v1.2.13
 - Fixed Mautic 7 SMS transport compatibility by implementing
   `Mautic\SmsBundle\Sms\TransportInterface` instead of extending the removed

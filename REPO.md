@@ -1,4 +1,4 @@
-Mautic WhatsApp (via Zender) – Plugin v1.2.13
+Mautic WhatsApp (via Zender) – Plugin v1.2.15
 Compatible con Mautic 5.1.x, 6.x y 7.x
 - Envío vía Zender (form_params), normalización E.164 sin región fija
 - Detección de media y reemplazo de /r/... por URL real
