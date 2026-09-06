@@ -1,4 +1,12 @@
 ## v1.2.15
+
+## 1.2.16 — 2026-09-06
+
+- Support Mautic 7.2 while retaining the declared older Mautic versions.
+- Use a plugin-scoped EncryptionHelper service alias; keep legacy argument parsing and the global core container unchanged.
+- Add a fresh-kernel regression check that instantiates integration services and resolves form types.
+- Preserve the Mautic 5 session constructor argument and correctly recognize two-digit patch versions such as 5.2.10.
+
 - Updated the unified Sales Snap footer to the canonical `sales-snap.com`
   domain.
 

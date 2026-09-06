@@ -7,13 +7,13 @@ $integrationArguments = [
 ];
 
 // Mautic 5 expects `session`; Mautic 6/7 removed it and added FieldsWithUniqueIdentifier.
-if (class_exists(\Mautic\LeadBundle\Field\FieldsWithUniqueIdentifier::class)) {
+if ((int) (new \Mautic\CoreBundle\Helper\AppVersion())->getVersion() >= 6) {
     $integrationArguments = array_merge($integrationArguments, [
         'request_stack',
         'router',
         'translator',
         'logger',
-        'mautic.helper.encryption',
+        'mauticzenderbundle.helper.encryption',
         'mautic.lead.model.lead',
         'mautic.lead.model.company',
         'mautic.helper.paths',
@@ -30,7 +30,7 @@ if (class_exists(\Mautic\LeadBundle\Field\FieldsWithUniqueIdentifier::class)) {
         'router',
         'translator',
         'logger',
-        'mautic.helper.encryption',
+        'mauticzenderbundle.helper.encryption',
         'mautic.lead.model.lead',
         'mautic.lead.model.company',
         'mautic.helper.paths',
@@ -45,7 +45,7 @@ return [
     'name'         => 'Zender',
     'description'  => 'This plugin replaces the SMS channel and allows you to send messages to WhatsApp using a Zender account. Intended for Mautic 5/6/7',
     'author'       => 'AlexanderZlobinM1',
-    'version'      => '1.2.15',
+    'version'      => '1.2.16',
     'release_date' => '2026-07-06',
     'license'      => 'GNU/GPLv3',
     'homepage'     => 'https://github.com/AlexanderZlobinM1/MauticZenderPlugin',

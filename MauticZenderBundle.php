@@ -18,4 +18,10 @@ use Mautic\IntegrationsBundle\Bundle\AbstractPluginBundle;
  */
 class MauticZenderBundle extends AbstractPluginBundle
 {
+    public function build(\Symfony\Component\DependencyInjection\ContainerBuilder $container): void
+    {
+        parent::build($container);
+        $container->setAlias('mauticzenderbundle.helper.encryption', \Mautic\CoreBundle\Helper\EncryptionHelper::class);
+    }
+
 }
